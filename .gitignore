@@ -1,0 +1,20 @@
+# Secrets and local environment values
+.env
+.env.*
+**/.env
+**/.env.*
+!supabase/.env.example
+
+# Private key material
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local tooling and deployment state
+.DS_Store
+.netlify/
+dist/
+node_modules/
+supabase/.temp/
+supabase/.branches/

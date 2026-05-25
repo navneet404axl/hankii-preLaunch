@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HANKii — Never forget a coding problem again</title>
+  <meta name="description" content="HANKii helps you revise solved DSA problems using spaced repetition, smart scheduling, and interview-focused review queues." />
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #080808;
+      --surface:   #111111;
+      --surface-2: #181818;
+      --border:    rgba(255,255,255,0.07);
+      --border-2:  rgba(255,255,255,0.12);
+      --text:      #f0f0f0;
+      --text-2:    #888;
+      --text-3:    #555;
+      --blue:      #60a5fa;
+      --blue-dim:  rgba(96,165,250,0.12);
+      --blue-dim2: rgba(96,165,250,0.06);
+      --emerald:   #34d399;
+      --emerald-dim: rgba(52,211,153,0.1);
+      --amber:     #fbbf24;
+      --amber-dim: rgba(251,191,36,0.1);
+      --red:       #f87171;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ─── Layout ─── */
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section--tight { padding: 72px 0; }
+
+    /* ─── Nav ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      border-bottom: 1px solid var(--border);
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; max-width: 1160px; margin: 0 auto; padding: 0 24px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 17px; font-weight: 700; color: var(--text);
+      text-decoration: none; letter-spacing: -0.3px;
+    }
+    .logo-mark {
+      width: 26px; height: 26px; border-radius: 6px;
+      background: var(--blue); display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800; color: #fff;
+    }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      padding: 6px 12px; border-radius: 6px; font-size: 14px; font-weight: 450;
+      color: var(--text-2); text-decoration: none; transition: color .15s, background .15s;
+    }
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .nav-cta {
+      padding: 7px 16px; border-radius: 7px; font-size: 13.5px; font-weight: 600;
+      background: var(--blue); color: #fff; text-decoration: none;
+      transition: opacity .15s, transform .15s;
+    }
+    .nav-cta:hover { opacity: .88; transform: translateY(-1px); }
+
+    /* ─── Hero ─── */
+    .hero {
+      padding: 160px 0 112px;
+      text-align: center;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 900px 600px at 50% 0%, rgba(96,165,250,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 100px;
+      border: 1px solid var(--border-2);
+      background: var(--surface);
+      font-size: 12.5px; font-weight: 500; color: var(--text-2);
+      margin-bottom: 36px;
+    }
+    .hero-badge span { color: var(--blue); }
+    .hero-badge-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--emerald);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .5; transform: scale(.8); }
+    }
+    .hero h1 {
+      font-size: clamp(40px, 7vw, 76px);
+      font-weight: 800;
+      letter-spacing: -2.5px;
+      line-height: 1.05;
+      color: var(--text);
+      max-width: 880px;
+      margin: 0 auto 24px;
+    }
+    .hero h1 em { font-style: normal; color: var(--blue); }
+    .hero-sub {
+      font-size: clamp(16px, 2.2vw, 19px);
+      color: var(--text-2);
+      max-width: 600px;
+      margin: 0 auto 48px;
+      line-height: 1.65;
+      font-weight: 400;
+    }
+    .hero-form {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .hero-form input {
+      padding: 13px 18px; border-radius: 9px;
+      border: 1px solid var(--border-2);
+      background: var(--surface); color: var(--text);
+      font-size: 14.5px; font-family: 'Inter', sans-serif;
+      width: 300px; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .hero-form input::placeholder { color: var(--text-3); }
+    .hero-form input:focus {
+      border-color: rgba(96,165,250,0.5);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.08);
+    }
+    .signup-form { position: relative; }
+    .bot-field {
+      position: absolute !important;
+      left: -10000px !important;
+      width: 1px !important;
+      height: 1px !important;
+      overflow: hidden !important;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 13px 22px; border-radius: 9px;
+      background: var(--blue); color: #fff;
+      font-size: 14.5px; font-weight: 600; font-family: 'Inter', sans-serif;
+      border: none; cursor: pointer;
+      transition: opacity .15s, transform .15s, box-shadow .15s;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 4px 24px rgba(96,165,250,0.28);
+    }
+    .btn-primary:hover { opacity: .88; transform: translateY(-1px); box-shadow: 0 6px 32px rgba(96,165,250,0.38); }
+    .btn-primary:disabled { cursor: not-allowed; opacity: .76; transform: none; }
+    .btn-primary.is-success {
+      background: #059669;
+      box-shadow: 0 4px 24px rgba(5,150,105,0.3);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 12px 20px; border-radius: 9px;
+      background: transparent; color: var(--text-2);
+      font-size: 14.5px; font-weight: 500; font-family: 'Inter', sans-serif;
+      border: 1px solid var(--border-2); cursor: pointer;
+      transition: color .15s, border-color .15s, background .15s;
+      text-decoration: none;
+    }
+    .btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.04); }
+    .hero-trust {
+      font-size: 13px; color: var(--text-3);
+    }
+    .hero-ctas { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 24px; flex-wrap: wrap; }
+
+    /* ─── Section headers ─── */
+    .section-label {
+      display: inline-block; font-size: 11.5px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1.5px; color: var(--blue);
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: clamp(26px, 4vw, 44px);
+      font-weight: 750; letter-spacing: -1.2px; line-height: 1.1;
+      color: var(--text); margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 16.5px; color: var(--text-2); line-height: 1.65;
+      max-width: 560px;
+    }
+    .section-header { text-align: center; margin-bottom: 64px; }
+    .section-header .section-sub { margin: 0 auto; }
+
+    /* ─── Divider ─── */
+    .divider {
+      height: 1px; background: var(--border);
+      max-width: 1160px; margin: 0 auto;
+    }
+
+    /* ─── Problem Section ─── */
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+      margin-top: 56px;
+    }
+    .pain-card {
+      padding: 28px 24px; border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      position: relative; overflow: hidden;
+      transition: border-color .2s, transform .2s;
+    }
+    .pain-card:hover { border-color: var(--border-2); transform: translateY(-2px); }
+    .pain-card::before {
+      content: '"';
+      position: absolute; top: -10px; right: 20px;
+      font-size: 120px; color: rgba(255,255,255,0.03);
+      font-weight: 900; line-height: 1;
+      pointer-events: none;
+    }
+    .pain-card-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: rgba(251,191,36,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px; margin-bottom: 16px;
+    }
+    .pain-card p {
+      font-size: 15.5px; font-weight: 500; color: var(--text);
+      line-height: 1.5; font-style: italic;
+    }
+
+    /* ─── Solution Section ─── */
+    .solution-bg {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .flow-steps {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; flex-wrap: wrap; margin-top: 56px;
+    }
+    .flow-step {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 10px; text-align: center;
+    }
+    .flow-step-num {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 2px solid var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px; font-weight: 700; color: var(--blue);
+      background: var(--blue-dim);
+    }
+    .flow-step-label {
+      font-size: 13.5px; font-weight: 600; color: var(--text);
+      white-space: nowrap;
+    }
+    .flow-step-sub {
+      font-size: 12px; color: var(--text-2);
+    }
+    .flow-arrow {
+      color: var(--text-3); font-size: 22px;
+      padding: 0 16px; margin-top: -20px;
+      flex-shrink: 0;
+    }
+
+    /* ─── Benefits ─── */
+    .benefits-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+    }
+    .benefit-card {
+      padding: 28px 24px; border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: border-color .2s, transform .2s;
+    }
+    .benefit-card:hover { border-color: var(--border-2); transform: translateY(-2px); }
+    .benefit-icon {
+      width: 40px; height: 40px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; margin-bottom: 16px;
+    }
+    .benefit-card h3 {
+      font-size: 15px; font-weight: 650; color: var(--text);
+      margin-bottom: 8px; letter-spacing: -0.2px;
+    }
+    .benefit-card p { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+
+    /* ─── Product Preview ─── */
+    .preview-bg {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .preview-window {
+      border-radius: 14px;
+      border: 1px solid var(--border-2);
+      overflow: hidden;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+      margin-top: 56px;
+    }
+    .preview-titlebar {
+      background: #0d0d0d; padding: 12px 16px;
+      display: flex; align-items: center; gap: 7px;
+      border-bottom: 1px solid var(--border);
+    }
+    .preview-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .preview-titlebar-title {
+      margin-left: 8px; font-size: 12.5px; color: var(--text-3);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .preview-body { display: flex; min-height: 440px; }
+    .preview-sidebar {
+      width: 200px; flex-shrink: 0;
+      background: #0c0c0c; border-right: 1px solid var(--border);
+      padding: 16px 12px;
+    }
+    .preview-sidebar-label {
+      font-size: 10.5px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 1px; color: var(--text-3); padding: 0 8px;
+      margin-bottom: 8px; margin-top: 16px;
+    }
+    .preview-sidebar-label:first-child { margin-top: 0; }
+    .preview-nav-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 8px; border-radius: 6px;
+      font-size: 13px; color: var(--text-2); cursor: pointer;
+      margin-bottom: 2px;
+    }
+    .preview-nav-item.active { background: var(--blue-dim); color: var(--blue); }
+    .preview-nav-item span { font-size: 14px; }
+    .preview-main { flex: 1; padding: 24px; overflow: hidden; }
+    .preview-section-title {
+      font-size: 15px; font-weight: 650; color: var(--text);
+      margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .preview-badge {
+      display: inline-flex; align-items: center;
+      padding: 2px 8px; border-radius: 4px;
+      font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+    }
+    .badge-blue { background: var(--blue-dim); color: var(--blue); }
+    .badge-emerald { background: var(--emerald-dim); color: var(--emerald); }
+    .badge-amber { background: var(--amber-dim); color: var(--amber); }
+    .badge-red { background: rgba(248,113,113,0.1); color: var(--red); }
+    .badge-violet { background: rgba(167,139,250,0.1); color: #a78bfa; }
+    .preview-queue-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 9px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      margin-bottom: 8px;
+    }
+    .preview-queue-item:hover { border-color: var(--border-2); }
+    .queue-item-info { flex: 1; min-width: 0; }
+    .queue-item-title { font-size: 13.5px; font-weight: 550; color: var(--text); margin-bottom: 5px; }
+    .queue-item-meta { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .queue-item-actions {
+      display: flex; gap: 6px; flex-shrink: 0;
+    }
+    .review-btn {
+      padding: 5px 11px; border-radius: 5px;
+      font-size: 11.5px; font-weight: 600;
+      border: 1px solid var(--border); cursor: pointer;
+      background: transparent; transition: all .15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .review-btn.again { color: var(--red); border-color: rgba(248,113,113,0.25); }
+    .review-btn.again:hover { background: rgba(248,113,113,0.08); }
+    .review-btn.hard { color: var(--amber); border-color: rgba(251,191,36,0.25); }
+    .review-btn.hard:hover { background: rgba(251,191,36,0.08); }
+    .review-btn.good { color: var(--blue); border-color: rgba(96,165,250,0.25); }
+    .review-btn.good:hover { background: var(--blue-dim); }
+    .review-btn.easy { color: var(--emerald); border-color: rgba(52,211,153,0.25); }
+    .review-btn.easy:hover { background: var(--emerald-dim); }
+    .preview-tag {
+      font-size: 10.5px; color: var(--text-3);
+      padding: 2px 6px; border-radius: 4px;
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+    }
+
+    /* ─── Who It's For ─── */
+    .audience-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+    }
+    .audience-card {
+      padding: 22px 20px; border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      transition: border-color .2s, transform .2s;
+    }
+    .audience-card:hover { border-color: var(--border-2); transform: translateY(-2px); }
+    .audience-icon { font-size: 22px; margin-bottom: 10px; }
+    .audience-card h3 { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .audience-card p { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+    /* ─── Waitlist / CTA Sections ─── */
+    .waitlist-box {
+      border: 1px solid var(--border-2);
+      border-radius: 16px;
+      background: var(--surface);
+      padding: 64px 48px;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .waitlist-box::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 600px 400px at 50% 0%, rgba(96,165,250,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .waitlist-box h2 {
+      font-size: clamp(26px, 3.5vw, 40px);
+      font-weight: 750; letter-spacing: -1px; color: var(--text);
+      margin-bottom: 12px;
+    }
+    .waitlist-box p { font-size: 16px; color: var(--text-2); margin-bottom: 36px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .waitlist-form {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; flex-wrap: wrap; margin-bottom: 14px;
+    }
+    .waitlist-form input {
+      padding: 13px 18px; border-radius: 9px;
+      border: 1px solid var(--border-2);
+      background: #0d0d0d; color: var(--text);
+      font-size: 14.5px; font-family: 'Inter', sans-serif;
+      width: 280px; outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .waitlist-form input::placeholder { color: var(--text-3); }
+    .waitlist-form input:focus {
+      border-color: rgba(96,165,250,0.5);
+      box-shadow: 0 0 0 3px rgba(96,165,250,0.08);
+    }
+    .turnstile-slot {
+      display: flex;
+      flex-basis: 100%;
+      justify-content: center;
+      min-height: 0;
+    }
+    .signup-status {
+      flex-basis: 100%;
+      min-height: 20px;
+      font-size: 13px;
+      color: var(--text-2);
+      margin-top: 2px;
+    }
+    .signup-status[data-state="error"] { color: var(--red); }
+    .signup-status[data-state="success"] { color: var(--emerald); }
+    .consent-note, .waitlist-box .waitlist-note {
+      font-size: 12.5px;
+      color: var(--text-3);
+      line-height: 1.55;
+    }
+    .hero .consent-note { margin: -8px auto 24px; max-width: 470px; }
+    .waitlist-box .waitlist-note { margin-bottom: 0; }
+    .final-cta .consent-note { font-size: 13px; margin: 12px auto 0; }
+
+    /* ─── FAQ ─── */
+    .faq-list { max-width: 720px; margin: 0 auto; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+    .faq-question {
+      width: 100%; background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 0; gap: 16px; text-align: left;
+      font-family: 'Inter', sans-serif;
+    }
+    .faq-question span:first-child {
+      font-size: 15.5px; font-weight: 550; color: var(--text);
+    }
+    .faq-chevron {
+      width: 20px; height: 20px; flex-shrink: 0;
+      border: 1px solid var(--border-2); border-radius: 5px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2); font-size: 12px;
+      transition: transform .2s;
+    }
+    .faq-item.open .faq-chevron { transform: rotate(180deg); border-color: var(--blue); color: var(--blue); }
+    .faq-answer {
+      font-size: 14.5px; color: var(--text-2); line-height: 1.7;
+      padding-bottom: 22px; display: none;
+    }
+    .faq-item.open .faq-answer { display: block; }
+
+    /* ─── Final CTA ─── */
+    .final-cta {
+      padding: 96px 0;
+      text-align: center;
+      position: relative;
+    }
+    .final-cta::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 800px 500px at 50% 100%, rgba(96,165,250,0.06) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .final-cta h2 {
+      font-size: clamp(30px, 5vw, 54px);
+      font-weight: 800; letter-spacing: -2px; color: var(--text);
+      max-width: 700px; margin: 0 auto 16px; line-height: 1.1;
+    }
+    .final-cta h2 em { font-style: normal; color: var(--blue); }
+    .final-cta p { font-size: 17px; color: var(--text-2); max-width: 520px; margin: 0 auto 40px; }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 15px; font-weight: 700; color: var(--text);
+      text-decoration: none;
+    }
+    .footer-copy { font-size: 13px; color: var(--text-3); }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { font-size: 13px; color: var(--text-3); text-decoration: none; transition: color .15s; }
+    .footer-links a:hover { color: var(--text-2); }
+
+    /* ─── Stats Bar ─── */
+    .stats-bar {
+      display: flex; align-items: center; justify-content: center;
+      gap: 48px; flex-wrap: wrap;
+      padding: 40px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .stat-item { text-align: center; }
+    .stat-value {
+      font-size: 28px; font-weight: 750; color: var(--text);
+      letter-spacing: -1px; margin-bottom: 4px;
+    }
+    .stat-label { font-size: 13px; color: var(--text-2); }
+
+    /* ─── Schedule Visual ─── */
+    .schedule-visual {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; flex-wrap: wrap; margin-top: 48px;
+    }
+    .schedule-day {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .schedule-dot {
+      width: 38px; height: 38px; border-radius: 50%;
+      border: 2px solid var(--border-2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12.5px; font-weight: 650; color: var(--text-2);
+      background: var(--surface);
+      transition: all .2s;
+    }
+    .schedule-dot.active { border-color: var(--blue); color: var(--blue); background: var(--blue-dim); }
+    .schedule-dot.done { border-color: var(--emerald); color: var(--emerald); background: var(--emerald-dim); }
+    .schedule-day-label { font-size: 11px; color: var(--text-3); }
+    .schedule-connector { width: 24px; height: 2px; background: var(--border); margin-top: -16px; flex-shrink: 0; }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 900px) {
+      .problem-grid, .benefits-grid { grid-template-columns: 1fr 1fr; }
+      .audience-grid { grid-template-columns: 1fr 1fr; }
+      .preview-sidebar { display: none; }
+    }
+    @media (max-width: 600px) {
+      .problem-grid, .benefits-grid, .audience-grid { grid-template-columns: 1fr; }
+      .flow-steps { gap: 0; }
+      .flow-arrow { padding: 0 8px; font-size: 18px; }
+      .waitlist-box { padding: 40px 24px; }
+      .nav-links { display: none; }
+      .stats-bar { gap: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">H</div>
+      HANKii
+    </a>
+    <div class="nav-links">
+      <a href="#how-it-works">How it works</a>
+      <a href="#benefits">Features</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <a href="#waitlist" class="nav-cta">Join waitlist</a>
+  </div>
+</nav>
+
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Now accepting early access — <span>Join the waitlist</span>
+    </div>
+    <h1>Never forget a <em>coding problem</em> again.</h1>
+    <p class="hero-sub">
+      HANKii helps you revise solved DSA problems using spaced repetition, smart scheduling, and interview-focused review queues — so your hard-earned practice actually stays in memory.
+    </p>
+    <form class="hero-form signup-form" data-source="hero" novalidate>
+      <label class="bot-field" aria-hidden="true">
+        Leave this blank
+        <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      </label>
+      <label class="bot-field" for="hero-email">Email address</label>
+      <input id="hero-email" name="email" type="email" placeholder="Enter your email" autocomplete="email" maxlength="254" required />
+      <button class="btn-primary" type="submit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <span class="btn-label">Get early access</span>
+      </button>
+      <div class="turnstile-slot"></div>
+      <div class="signup-status" role="status" aria-live="polite"></div>
+    </form>
+    <p class="consent-note">By joining, you agree to receive HANKii early access and launch emails. Unsubscribe anytime.</p>
+    <div class="hero-ctas">
+      <a href="#how-it-works" class="btn-secondary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M10 15l5-3-5-3z" fill="currentColor"/></svg>
+        See how it works
+      </a>
+    </div>
+    <p class="hero-trust">Built for students and developers preparing for technical interviews.</p>
+  </div>
+</section>
+
+
+<!-- ═══ STATS ═══ -->
+<div class="container">
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-value">6×</div>
+      <div class="stat-label">Revision intervals per problem</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">Day&nbsp;30</div>
+      <div class="stat-label">Final spaced review milestone</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">3</div>
+      <div class="stat-label">Smart scheduling modes</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value">0</div>
+      <div class="stat-label">Problems forgotten again</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ PROBLEM ═══ -->
+<section class="section" id="problem">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">The problem</div>
+      <h2 class="section-title">Solving problems is not enough.<br>Remembering them is the real challenge.</h2>
+      <p class="section-sub">
+        Most people solve hundreds of LeetCode problems but forget the patterns, edge cases, and mistakes weeks later. Notes become messy, bookmarks pile up, and revision becomes random.
+      </p>
+    </div>
+    <div class="problem-grid">
+      <div class="pain-card">
+        <div class="pain-card-icon">😶</div>
+        <p>"I solved this before… but I forgot the approach when it came up in the interview."</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-card-icon">📂</div>
+        <p>"My revision list is scattered across Notion, Excel sheets, bookmarks, and sticky notes."</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-card-icon">🤷</div>
+        <p>"I don't know what to review today — so I just re-do random problems and hope for the best."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ SOLUTION ═══ -->
+<section class="section solution-bg" id="how-it-works">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">How it works</div>
+      <h2 class="section-title">HANKii turns solved problems<br>into a smart revision system.</h2>
+      <p class="section-sub">
+        After solving a problem, add it to HANKii. The app schedules future reviews so you revisit the problem at exactly the right time — before the pattern fades.
+      </p>
+    </div>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-step-num">1</div>
+        <div class="flow-step-label">Solve a problem</div>
+        <div class="flow-step-sub">On LeetCode, NeetCode, etc.</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-num">2</div>
+        <div class="flow-step-label">Add to HANKii</div>
+        <div class="flow-step-sub">Paste the link or enter title</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-num">3</div>
+        <div class="flow-step-label">Review on schedule</div>
+        <div class="flow-step-sub">Queue tells you what's due today</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-step-num">4</div>
+        <div class="flow-step-label">Retain the pattern</div>
+        <div class="flow-step-sub">Confidence builds over time</div>
+      </div>
+    </div>
+
+    <div class="schedule-visual" style="margin-top: 64px;">
+      <div class="schedule-day"><div class="schedule-dot done">0</div><div class="schedule-day-label">Day 0</div></div>
+      <div class="schedule-connector"></div>
+      <div class="schedule-day"><div class="schedule-dot done">1</div><div class="schedule-day-label">Day 1</div></div>
+      <div class="schedule-connector"></div>
+      <div class="schedule-day"><div class="schedule-dot done">3</div><div class="schedule-day-label">Day 3</div></div>
+      <div class="schedule-connector"></div>
+      <div class="schedule-day"><div class="schedule-dot active">7</div><div class="schedule-day-label">Day 7 ←</div></div>
+      <div class="schedule-connector"></div>
+      <div class="schedule-day"><div class="schedule-dot">14</div><div class="schedule-day-label">Day 14</div></div>
+      <div class="schedule-connector"></div>
+      <div class="schedule-day"><div class="schedule-dot">30</div><div class="schedule-day-label">Day 30</div></div>
+    </div>
+    <p style="text-align:center; font-size: 13px; color: var(--text-3); margin-top: 16px;">Fixed Schedule: problem gets revisited at each milestone automatically</p>
+  </div>
+</section>
+
+
+<!-- ═══ BENEFITS ═══ -->
+<section class="section" id="benefits">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Features</div>
+      <h2 class="section-title">Built for serious interview preparation.</h2>
+      <p class="section-sub">Every feature is designed to help you retain what you learn and walk into interviews with real confidence.</p>
+    </div>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:var(--blue-dim);">📅</div>
+        <h3>Spaced repetition for DSA</h3>
+        <p>Review problems on Day 0, 1, 3, 7, 14, and 30 so patterns stay fresh right up to your interview day.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:var(--emerald-dim);">📋</div>
+        <h3>Smart revision queue</h3>
+        <p>Know exactly what to review today. No guessing, no scrolling through old sheets — just open HANKii and start.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:var(--amber-dim);">🧠</div>
+        <h3>Track mistakes and patterns</h3>
+        <p>Save the approach, key insight, edge cases, and mistakes for every problem so you never repeat the same error.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:rgba(167,139,250,0.1);">⚡</div>
+        <h3>FSRS smart scheduling</h3>
+        <p>Rate each review as Again, Hard, Good, or Easy. HANKii adjusts future due dates based on your actual memory strength.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:rgba(52,211,153,0.08);">🔀</div>
+        <h3>Hybrid scheduling</h3>
+        <p>Combine fixed revision intervals with smart memory-based scheduling for the most reliable prep system.</p>
+      </div>
+      <div class="benefit-card">
+        <div class="benefit-icon" style="background:rgba(96,165,250,0.08);">🎯</div>
+        <h3>Interview-ready recall</h3>
+        <p>Build real confidence by systematically revisiting the problems, patterns, and edge cases that matter most.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ PRODUCT PREVIEW ═══ -->
+<section class="section preview-bg" id="preview">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Product</div>
+      <h2 class="section-title">Your personal DSA memory system.</h2>
+      <p class="section-sub">A clean, focused app built around the one question that matters: what should I review today?</p>
+    </div>
+
+    <div class="preview-window">
+      <div class="preview-titlebar">
+        <div class="preview-dot" style="background:#ff5f57;"></div>
+        <div class="preview-dot" style="background:#febc2e;"></div>
+        <div class="preview-dot" style="background:#28c840;"></div>
+        <span class="preview-titlebar-title">hankii.app / queue</span>
+      </div>
+      <div class="preview-body">
+        <div class="preview-sidebar">
+          <div class="preview-sidebar-label">Navigation</div>
+          <div class="preview-nav-item active"><span>📋</span> Revision Queue</div>
+          <div class="preview-nav-item"><span>📚</span> Problem Library</div>
+          <div class="preview-nav-item"><span>➕</span> Add Problem</div>
+          <div class="preview-nav-item"><span>📊</span> Dashboard</div>
+          <div class="preview-sidebar-label">Account</div>
+          <div class="preview-nav-item"><span>⚙️</span> Settings</div>
+          <div class="preview-nav-item"><span>💳</span> Billing</div>
+        </div>
+        <div class="preview-main">
+          <div class="preview-section-title">
+            <span>Revision Queue</span>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <span class="preview-badge badge-red">3 overdue</span>
+              <span class="preview-badge badge-blue">5 due today</span>
+            </div>
+          </div>
+
+          <div style="font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;font-weight:600;">Overdue</div>
+
+          <div class="preview-queue-item">
+            <div class="queue-item-info">
+              <div class="queue-item-title">LRU Cache</div>
+              <div class="queue-item-meta">
+                <span class="preview-badge badge-amber">Day 7</span>
+                <span class="preview-badge badge-blue">Fixed</span>
+                <span class="preview-tag">Design</span>
+                <span class="preview-tag">Medium</span>
+              </div>
+            </div>
+            <div class="queue-item-actions">
+              <button class="review-btn again">Again</button>
+              <button class="review-btn hard">Hard</button>
+              <button class="review-btn good">Good</button>
+              <button class="review-btn easy">Easy</button>
+            </div>
+          </div>
+
+          <div style="font-size:11px;color:var(--text-3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;margin-top:16px;font-weight:600;">Due Today</div>
+
+          <div class="preview-queue-item">
+            <div class="queue-item-info">
+              <div class="queue-item-title">Two Sum</div>
+              <div class="queue-item-meta">
+                <span class="preview-badge badge-blue">Day 1</span>
+                <span class="preview-badge badge-blue">Fixed</span>
+                <span class="preview-tag">Array</span>
+                <span class="preview-tag">Easy</span>
+              </div>
+            </div>
+            <div class="queue-item-actions">
+              <button class="review-btn again">Again</button>
+              <button class="review-btn good">Good</button>
+              <button class="review-btn easy">Easy</button>
+            </div>
+          </div>
+
+          <div class="preview-queue-item">
+            <div class="queue-item-info">
+              <div class="queue-item-title">Number of Islands</div>
+              <div class="queue-item-meta">
+                <span class="preview-badge badge-blue">Day 7</span>
+                <span class="preview-badge badge-violet">FSRS</span>
+                <span class="preview-badge" style="background:rgba(52,211,153,0.08);color:var(--emerald);">Hybrid</span>
+                <span class="preview-tag">BFS</span>
+                <span class="preview-tag">Medium</span>
+              </div>
+            </div>
+            <div class="queue-item-actions">
+              <button class="review-btn again">Again</button>
+              <button class="review-btn hard">Hard</button>
+              <button class="review-btn good">Good</button>
+              <button class="review-btn easy">Easy</button>
+            </div>
+          </div>
+
+          <div class="preview-queue-item">
+            <div class="queue-item-info">
+              <div class="queue-item-title">Longest Substring Without Repeating Chars</div>
+              <div class="queue-item-meta">
+                <span class="preview-badge badge-violet">FSRS</span>
+                <span class="preview-tag">Sliding Window</span>
+                <span class="preview-tag">Medium</span>
+              </div>
+            </div>
+            <div class="queue-item-actions">
+              <button class="review-btn again">Again</button>
+              <button class="review-btn hard">Hard</button>
+              <button class="review-btn good">Good</button>
+              <button class="review-btn easy">Easy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ WHO IT'S FOR ═══ -->
+<section class="section" id="audience">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">Who it's for</div>
+      <h2 class="section-title">Made for people who are serious about getting better.</h2>
+      <p class="section-sub">If you're putting real time into interview prep, you deserve a tool that protects that investment.</p>
+    </div>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-icon">🎓</div>
+        <h3>CS students preparing for internships</h3>
+        <p>Build a strong foundation by systematically revising the problems and patterns interviewers actually test.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">💼</div>
+        <h3>New grads preparing for full-time roles</h3>
+        <p>Stay sharp across all topics without wasting hours re-learning what you already solved before.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">⚡</div>
+        <h3>LeetCode users who forget solved problems</h3>
+        <p>Stop re-solving problems from scratch. HANKii schedules them so you review before the pattern fades.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🔁</div>
+        <h3>Developers revising patterns before interviews</h3>
+        <p>Two weeks before an interview, know exactly which problems need a refresh and which are solid.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">📝</div>
+        <h3>NeetCode, Striver, and Grind 75 users</h3>
+        <p>Use any DSA sheet or playlist alongside HANKii. Add problems from any source — all in one place.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🏆</div>
+        <h3>Anyone who wants a system, not just a list</h3>
+        <p>Stop trusting random revision. Build a real memory plan with structure, tracking, and confidence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ WAITLIST ═══ -->
+<section class="section--tight" id="waitlist">
+  <div class="container">
+    <div class="waitlist-box">
+      <div class="section-label">Early access</div>
+      <h2>Want early access?</h2>
+      <p>I'm building HANKii to solve a real problem in coding interview prep. Join the waitlist if you want a smarter way to revise solved problems and retain DSA patterns long-term.</p>
+      <form class="waitlist-form signup-form" data-source="waitlist" novalidate>
+        <label class="bot-field" aria-hidden="true">
+          Leave this blank
+          <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
+        </label>
+        <label class="bot-field" for="waitlist-email">Email address</label>
+        <input id="waitlist-email" name="email" type="email" placeholder="Enter your email" autocomplete="email" maxlength="254" required />
+        <button class="btn-primary" type="submit">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span class="btn-label">Join the waitlist</span>
+        </button>
+        <div class="turnstile-slot"></div>
+        <div class="signup-status" role="status" aria-live="polite"></div>
+      </form>
+      <p class="waitlist-note">By joining, you agree to receive HANKii early access and launch emails. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ FAQ ═══ -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-label">FAQ</div>
+      <h2 class="section-title">Common questions.</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>Is HANKii another DSA sheet?</span>
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          No. HANKii is not just a list of problems. It's a revision system that helps you remember problems <em>after</em> you solve them. Think of it as the memory layer on top of any DSA sheet or problem source you already use.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>Can I use it with LeetCode or NeetCode?</span>
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          Yes. HANKii is designed to work alongside LeetCode, NeetCode, Striver sheets, Grind 75, or your own custom problem list. Paste the problem link to add it, or enter the title manually.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>Why not just use Notion or Excel?</span>
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          You can track problems manually, but HANKii gives you a dedicated revision queue, spaced repetition scheduling, due dates, and memory-based ratings — things that require significant manual work to replicate in general-purpose tools.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>Will it be free?</span>
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          HANKii is a paid subscription product with a 7-day free trial. Early waitlist users may receive discounted or extended access. The goal right now is to validate demand and build around real user feedback before full pricing kicks in.
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)">
+          <span>What is FSRS and do I need it?</span>
+          <span class="faq-chevron">▾</span>
+        </button>
+        <div class="faq-answer">
+          FSRS (Free Spaced Repetition Scheduler) is a modern memory algorithm that adapts review intervals based on how well you recalled the material. HANKii supports it alongside a simpler Fixed Schedule — you can use either, or both in Hybrid mode.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ FINAL CTA ═══ -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Stop re-solving from scratch.<br><em>Start remembering.</em></h2>
+    <p>Join the HANKii waitlist and be among the first to try a smarter way to revise DSA problems before your next interview.</p>
+    <form class="waitlist-form signup-form" data-source="final" novalidate>
+      <label class="bot-field" aria-hidden="true">
+        Leave this blank
+        <input type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true" />
+      </label>
+      <label class="bot-field" for="final-email">Email address</label>
+      <input id="final-email" name="email" type="email" placeholder="Enter your email" autocomplete="email" maxlength="254" required />
+      <button class="btn-primary" type="submit">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <span class="btn-label">Get early access</span>
+      </button>
+      <div class="turnstile-slot"></div>
+      <div class="signup-status" role="status" aria-live="polite"></div>
+    </form>
+    <p class="consent-note">By joining, you agree to receive HANKii early access and launch emails. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <a href="#" class="footer-logo">
+        <div class="logo-mark" style="width:22px;height:22px;font-size:11px;">H</div>
+        HANKii
+      </a>
+      <p class="footer-copy">© 2026 HANKii. Built for serious interview prep.</p>
+      <div class="footer-links">
+        <a href="#how-it-works">How it works</a>
+        <a href="#benefits">Features</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script src="config.js"></script>
+<script>
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  const signupConfig = window.HANKII_CONFIG || {};
+  const signupForms = document.querySelectorAll('.signup-form');
+
+  function setSignupStatus(form, message, state) {
+    const status = form.querySelector('.signup-status');
+    status.textContent = message;
+    status.dataset.state = state || '';
+  }
+
+  function setSignupBusy(form, isBusy) {
+    const button = form.querySelector('button[type="submit"]');
+    const label = button.querySelector('.btn-label');
+    button.disabled = isBusy;
+    label.textContent = isBusy ? 'Joining...' : button.dataset.defaultLabel;
+  }
+
+  function hasSignupConfig() {
+    const endpoint = signupConfig.signupEndpoint || '';
+    const siteKey = signupConfig.turnstileSiteKey || '';
+    return endpoint.startsWith('https://') &&
+      !endpoint.includes('YOUR_PROJECT_REF') &&
+      siteKey && !siteKey.includes('YOUR_TURNSTILE_SITE_KEY');
+  }
+
+  function initializeTurnstile() {
+    if (!window.turnstile || !hasSignupConfig()) return;
+
+    signupForms.forEach(form => {
+      if (form.turnstileWidgetId !== undefined) return;
+      form.turnstileWidgetId = turnstile.render(form.querySelector('.turnstile-slot'), {
+        sitekey: signupConfig.turnstileSiteKey,
+        theme: 'dark',
+        appearance: 'interaction-only',
+        execution: 'execute',
+        action: 'join_waitlist',
+        callback: token => submitSignup(form, token),
+        'expired-callback': () => {
+          setSignupBusy(form, false);
+          setSignupStatus(form, 'Verification expired. Please try again.', 'error');
+        },
+        'error-callback': () => {
+          setSignupBusy(form, false);
+          setSignupStatus(form, 'Verification failed. Please try again.', 'error');
+        }
+      });
+    });
+  }
+
+  window.onTurnstileLoaded = initializeTurnstile;
+
+  async function beginSignup(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    if (!hasSignupConfig()) {
+      setSignupStatus(form, 'Waitlist signup is being configured. Please check back shortly.', 'error');
+      return;
+    }
+
+    initializeTurnstile();
+    if (form.turnstileWidgetId === undefined) {
+      setSignupStatus(form, 'Verification is still loading. Please try again.', 'error');
+      return;
+    }
+
+    setSignupBusy(form, true);
+    setSignupStatus(form, 'Verifying your request...', '');
+    turnstile.reset(form.turnstileWidgetId);
+    turnstile.execute(form.turnstileWidgetId);
+  }
+
+  async function submitSignup(form, turnstileToken) {
+    const input = form.querySelector('input[name="email"]');
+    const honeypot = form.querySelector('input[name="company"]');
+
+    try {
+      const response = await fetch(signupConfig.signupEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: input.value.trim(),
+          source: form.dataset.source,
+          marketingConsent: true,
+          company: honeypot.value,
+          turnstileToken
+        })
+      });
+
+      if (!response.ok) throw new Error('Signup request failed');
+
+      const button = form.querySelector('button[type="submit"]');
+      const label = button.querySelector('.btn-label');
+      label.textContent = 'You are on the list';
+      button.classList.add('is-success');
+      button.disabled = true;
+      input.value = '';
+      input.disabled = true;
+      input.placeholder = 'Thanks - we will be in touch.';
+      setSignupStatus(form, 'Thanks. Watch your inbox for early access news.', 'success');
+    } catch (error) {
+      turnstile.reset(form.turnstileWidgetId);
+      setSignupBusy(form, false);
+      setSignupStatus(form, 'We could not save your email. Please try again.', 'error');
+    }
+  }
+
+  signupForms.forEach(form => {
+    const button = form.querySelector('button[type="submit"]');
+    button.dataset.defaultLabel = button.querySelector('.btn-label').textContent;
+    form.addEventListener('submit', beginSignup);
+  });
+
+  // Subtle entrance animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.pain-card, .benefit-card, .audience-card, .preview-queue-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(16px)';
+    el.style.transition = 'opacity .4s ease, transform .4s ease';
+    observer.observe(el);
+  });
+</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoaded&amp;render=explicit" async defer></script>
+
+</body>
+</html>

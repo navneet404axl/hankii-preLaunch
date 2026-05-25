@@ -1,0 +1,4 @@
+project_id = "hankii-landing"
+
+[functions.join-waitlist]
+verify_jwt = false
