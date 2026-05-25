@@ -12,12 +12,14 @@ interview revision product. Make sure that matches what you are validating.
 ## 1. Get a public website URL
 
 Use any static host. This repository now includes `netlify.toml`, so when you
-connect the GitHub repository to Netlify, it publishes only these three public
+connect the GitHub repository to Netlify, it publishes only these public
 files:
 
 - `index.html`
 - `config.js`
 - `favicon.png`
+- `robots.txt`
+- `sitemap.xml`
 
 The `supabase/` directory remains in GitHub as deployable backend source, but
 it is not included in the public Netlify website output. Local `.env` files are
@@ -27,7 +29,7 @@ At this stage signup displays a configuration message; do not share the URL
 until the remaining steps are complete. Your deployed origin is:
 
 ```text
-https://resonant-melomakarona-2a1ebb.netlify.app
+https://tryhankii.netlify.app
 ```
 
 ## 2. Create bot protection
@@ -35,7 +37,7 @@ https://resonant-melomakarona-2a1ebb.netlify.app
 In Cloudflare Turnstile, create a widget for your production hostname:
 
 ```text
-resonant-melomakarona-2a1ebb.netlify.app
+tryhankii.netlify.app
 ```
 
 You may also add `localhost` while testing locally.
@@ -84,8 +86,8 @@ commit or upload it:
 
 ```dotenv
 TURNSTILE_SECRET_KEY=YOUR_PRIVATE_TURNSTILE_SECRET_KEY
-ALLOWED_ORIGINS=https://resonant-melomakarona-2a1ebb.netlify.app
-ALLOWED_TURNSTILE_HOSTNAMES=resonant-melomakarona-2a1ebb.netlify.app
+ALLOWED_ORIGINS=https://tryhankii.netlify.app
+ALLOWED_TURNSTILE_HOSTNAMES=tryhankii.netlify.app
 ```
 
 Push these private settings and deploy the Edge Function:
