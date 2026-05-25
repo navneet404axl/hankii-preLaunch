@@ -596,12 +596,127 @@
       .preview-sidebar { display: none; }
     }
     @media (max-width: 600px) {
+      .container { padding: 0 20px; }
+      .section { padding: 64px 0; }
+      .section--tight { padding: 52px 0; }
+      .nav-inner { height: 56px; padding: 0 20px; }
+      .logo { font-size: 16px; }
+      .nav-cta { padding: 7px 12px; font-size: 13px; }
+      .hero { padding: 106px 0 64px; }
+      .hero-badge { margin-bottom: 26px; font-size: 12px; }
+      .hero h1 {
+        font-size: clamp(36px, 10vw, 40px);
+        letter-spacing: -1.7px;
+        line-height: 1.08;
+        margin-bottom: 18px;
+      }
+      .hero-sub { font-size: 16px; margin-bottom: 32px; }
+      .hero-form, .waitlist-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .hero-form input, .waitlist-form input {
+        width: 100%;
+        font-size: 16px;
+      }
+      .signup-form .btn-primary {
+        width: 100%;
+        justify-content: center;
+      }
+      .hero .consent-note { margin: -6px auto 22px; }
+      .hero-trust { line-height: 1.5; }
+      .section-header { margin-bottom: 38px; }
+      .section-title {
+        font-size: clamp(26px, 7.6vw, 31px);
+        letter-spacing: -0.9px;
+        line-height: 1.16;
+      }
+      .section-sub { font-size: 15px; }
       .problem-grid, .benefits-grid, .audience-grid { grid-template-columns: 1fr; }
-      .flow-steps { gap: 0; }
-      .flow-arrow { padding: 0 8px; font-size: 18px; }
-      .waitlist-box { padding: 40px 24px; }
+      .problem-grid { margin-top: 38px; }
+      .pain-card, .benefit-card { padding: 22px 20px; }
+      .flow-steps {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 38px;
+      }
+      .flow-step {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        column-gap: 14px;
+        row-gap: 2px;
+        align-items: center;
+        text-align: left;
+      }
+      .flow-step-num { grid-row: 1 / span 2; }
+      .flow-step-label, .flow-step-sub { grid-column: 2; }
+      .flow-step-label { white-space: normal; }
+      .flow-arrow {
+        align-self: flex-start;
+        padding: 0;
+        margin: 0 0 0 14px;
+        font-size: 18px;
+        transform: rotate(90deg);
+      }
+      .schedule-visual {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: 3px;
+        overflow-x: auto;
+        padding: 2px 0 8px;
+        scrollbar-width: none;
+      }
+      .schedule-visual::-webkit-scrollbar { display: none; }
+      .schedule-connector { width: 12px; }
+      .preview-window { margin-top: 38px; }
+      .preview-titlebar { padding: 10px 12px; }
+      .preview-titlebar-title { font-size: 11px; }
+      .preview-body { display: block; min-height: 0; }
+      .preview-main { padding: 16px 12px; }
+      .preview-section-title {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .preview-queue-item {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+      }
+      .queue-item-actions {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+      }
+      .review-btn { padding: 8px 2px; }
+      .waitlist-box { padding: 38px 18px; }
       .nav-links { display: none; }
-      .stats-bar { gap: 28px; }
+      .stats-bar {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0;
+        padding: 12px 0;
+      }
+      .stat-item { padding: 14px 8px; }
+      .stat-item:nth-child(odd) { border-right: 1px solid var(--border); }
+      .stat-item:nth-child(-n+2) { border-bottom: 1px solid var(--border); }
+      .stat-value { font-size: 25px; }
+      .stat-label { font-size: 12px; line-height: 1.45; }
+      .final-cta { padding: 64px 0; }
+      .final-cta h2 {
+        font-size: clamp(30px, 9vw, 35px);
+        letter-spacing: -1.2px;
+      }
+      .final-cta p { font-size: 15px; margin-bottom: 30px; }
+      .footer-inner {
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+      }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
     }
   </style>
 </head>
