@@ -24,17 +24,21 @@ it is not included in the public Netlify website output. Local `.env` files are
 excluded by `.gitignore` and must never be committed.
 
 At this stage signup displays a configuration message; do not share the URL
-until the remaining steps are complete. Save the resulting origin, for example:
+until the remaining steps are complete. Your deployed origin is:
 
 ```text
-https://hankii-example.netlify.app
+https://resonant-melomakarona-2a1ebb.netlify.app
 ```
 
 ## 2. Create bot protection
 
-In Cloudflare Turnstile, create a widget for your production hostname, for
-example `hankii-example.netlify.app`. You may also add `localhost` while
-testing locally.
+In Cloudflare Turnstile, create a widget for your production hostname:
+
+```text
+resonant-melomakarona-2a1ebb.netlify.app
+```
+
+You may also add `localhost` while testing locally.
 
 Save these values:
 
@@ -43,8 +47,17 @@ Save these values:
 
 ## 3. Create the database
 
-Create a Supabase project and copy its project reference from the dashboard
-URL or project settings.
+Your Supabase project URL is:
+
+```text
+https://zoeyimeoikpzhveqncqx.supabase.co
+```
+
+Your project reference is:
+
+```text
+zoeyimeoikpzhveqncqx
+```
 
 Install the Supabase CLI on macOS:
 
@@ -57,7 +70,7 @@ From this folder, authenticate, link the project, and apply the migration:
 ```bash
 cd /Users/nav/Rutgers/hankii-landing
 supabase login
-supabase link --project-ref YOUR_PROJECT_REF
+supabase link --project-ref zoeyimeoikpzhveqncqx
 supabase db push
 ```
 
@@ -71,8 +84,8 @@ commit or upload it:
 
 ```dotenv
 TURNSTILE_SECRET_KEY=YOUR_PRIVATE_TURNSTILE_SECRET_KEY
-ALLOWED_ORIGINS=https://hankii-example.netlify.app
-ALLOWED_TURNSTILE_HOSTNAMES=hankii-example.netlify.app
+ALLOWED_ORIGINS=https://resonant-melomakarona-2a1ebb.netlify.app
+ALLOWED_TURNSTILE_HOSTNAMES=resonant-melomakarona-2a1ebb.netlify.app
 ```
 
 Push these private settings and deploy the Edge Function:
@@ -91,8 +104,8 @@ Update the two public values in `config.js`:
 
 ```js
 window.HANKII_CONFIG = Object.freeze({
-  signupEndpoint: 'https://YOUR_PROJECT_REF.supabase.co/functions/v1/join-waitlist',
-  turnstileSiteKey: 'YOUR_PUBLIC_TURNSTILE_SITE_KEY'
+  signupEndpoint: 'https://zoeyimeoikpzhveqncqx.supabase.co/functions/v1/join-waitlist',
+  turnstileSiteKey: '0x4AAAAAADVnpJ6eCg0zz3lc'
 });
 ```
 
